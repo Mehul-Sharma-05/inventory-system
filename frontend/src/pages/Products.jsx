@@ -23,6 +23,7 @@ function Products() {
             <tr>
               <th>ID</th>
               <th>Name</th>
+              <th>SKU</th>
               <th>Price</th>
               <th>Quantity</th>
             </tr>
@@ -32,6 +33,7 @@ function Products() {
               <tr key={p.id}>
                 <td>{p.id}</td>
                 <td>{p.name}</td>
+                <td>{p.sku}</td>
                 <td>${p.price}</td>
                 <td>{p.quantity}</td>
               </tr>

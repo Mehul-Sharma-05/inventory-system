@@ -12,12 +12,6 @@ function Orders() {
     });
   }, []);
 
-  const badgeClass = (status) => {
-    if (status === 'complete') return 'badge badge-complete';
-    if (status === 'cancelled') return 'badge badge-cancelled';
-    return 'badge badge-pending';
-  };
-
   return (
     <div className="page">
       <h1>Orders</h1>
@@ -28,18 +22,20 @@ function Orders() {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Product</th>
-              <th>Quantity</th>
-              <th>Status</th>
+              <th>Customer ID</th>
+              <th>Total</th>
+              <th>Items</th>
+              <th>Date</th>
             </tr>
           </thead>
           <tbody>
             {orders.map(o => (
               <tr key={o.id}>
                 <td>{o.id}</td>
-                <td>{o.product}</td>
-                <td>{o.quantity}</td>
-                <td><span className={badgeClass(o.status)}>{o.status}</span></td>
+                <td>{o.customer_id}</td>
+                <td>${o.total.toFixed(2)}</td>
+                <td>{o.items.length} item(s)</td>
+                <td>{new Date(o.created_at).toLocaleDateString()}</td>
               </tr>
             ))}
           </tbody>
