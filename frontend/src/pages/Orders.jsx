@@ -2,20 +2,49 @@ import { useEffect, useState } from 'react';
 import api from '../api';
 
 function Orders() {
-  const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get('/orders').then(res => setProducts(res.data));
+    api.get('/orders').then(res => {
+      setOrders(res.data);
+      setLoading(false);
+    });
   }, []);
 
+  const badgeClass = (status) => {
+    if (status === 'complete') return 'badge badge-complete';
+    if (status === 'cancelled') return 'badge badge-cancelled';
+    return 'badge badge-pending';
+  };
+
   return (
-    <div>
+    <div className="page">
       <h1>Orders</h1>
-      <ul>
-        {products.map(p => (
-          <li key={p.id}>{p.name} — ${p.price}</li>
-        ))}
-      </ul>
+      {loading ? (
+        <p className="loading">Loading...</p>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map(o => (
+              <tr key={o.id}>
+                <td>{o.id}</td>
+                <td>{o.product}</td>
+                <td>{o.quantity}</td>
+                <td><span className={badgeClass(o.status)}>{o.status}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

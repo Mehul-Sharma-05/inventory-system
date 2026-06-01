@@ -3,19 +3,42 @@ import api from '../api';
 
 function Products() {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get('/products').then(res => setProducts(res.data));
+    api.get('/products').then(res => {
+      setProducts(res.data);
+      setLoading(false);
+    });
   }, []);
 
   return (
-    <div>
+    <div className="page">
       <h1>Products</h1>
-      <ul>
-        {products.map(p => (
-          <li key={p.id}>{p.name} — ${p.price}</li>
-        ))}
-      </ul>
+      {loading ? (
+        <p className="loading">Loading...</p>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map(p => (
+              <tr key={p.id}>
+                <td>{p.id}</td>
+                <td>{p.name}</td>
+                <td>${p.price}</td>
+                <td>{p.quantity}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

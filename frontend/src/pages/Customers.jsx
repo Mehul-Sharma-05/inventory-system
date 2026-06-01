@@ -2,20 +2,41 @@ import { useEffect, useState } from 'react';
 import api from '../api';
 
 function Customers() {
-  const [products, setProducts] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get('/customers').then(res => setProducts(res.data));
+    api.get('/customers').then(res => {
+      setCustomers(res.data);
+      setLoading(false);
+    });
   }, []);
 
   return (
-    <div>
+    <div className="page">
       <h1>Customers</h1>
-      <ul>
-        {products.map(p => (
-          <li key={p.id}>{p.name} — ${p.price}</li>
-        ))}
-      </ul>
+      {loading ? (
+        <p className="loading">Loading...</p>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            {customers.map(c => (
+              <tr key={c.id}>
+                <td>{c.id}</td>
+                <td>{c.name}</td>
+                <td>{c.email}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
